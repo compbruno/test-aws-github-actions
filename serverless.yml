@@ -1,6 +1,4 @@
 service: test-aws-github-actions
-app: poc-cadastro-fornecedores
-org: poc-evo
 
 frameworkVersion: "3"
 
