@@ -11,3 +11,7 @@ provider:
 functions:
   generateRandomNumber:
     handler: src/handler.generateRandomNumber
+  newSupplierCardMovedFunction:
+    handler: src/newSupplierCardMovedFunction.newSupplierCardMovedFunction
+  triggerNewSupplierCardMovedFunction:
+    handler: src/triggerNewSupplierCardMovedFunction.triggerNewSupplierCardMovedFunction
