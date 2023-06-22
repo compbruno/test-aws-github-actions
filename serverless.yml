@@ -7,11 +7,50 @@ provider:
   runtime: nodejs18.x
   stage: dev
   region: sa-east-1
+  memorySize: 128
+  iam:
+    role:
+      statements:
+        - Effect: allow
+          Action:
+            - "sqs:SendMessage"
+          Resource: !GetAtt newSupplierCardMovedQueue.Arn
+
+layers:
+  customLibs:
+    path: customLibs
+    name: SAM-Events-Advance-Helpers
+    description: Custom Libs shared between lambdas
+    compatibleRuntimes:
+      - nodejs18.x
 
 functions:
   generateRandomNumber:
     handler: src/handler.generateRandomNumber
+    timeout: 3
+    architecure: x86_64
+    events:
+      - httpApi:
+          method: POST
+          path: /pipefyWebhook/newSupplier/cardMoved/
+    layers:
+      - !Ref CustomLibsLambdaLayer
+
   newSupplierCardMovedFunction:
     handler: src/newSupplierCardMovedFunction.newSupplierCardMovedFunction
+
   triggerNewSupplierCardMovedFunction:
     handler: src/triggerNewSupplierCardMovedFunction.triggerNewSupplierCardMovedFunction
+
+resources:
+  Resources:
+    newSupplierCardMovedQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        DelaySeconds: 0
+        KmsDataKeyReusePeriodSeconds: 300 # 5 minutes (default)
+        KmsMasterKeyId: alias/aws/sqs
+        MaximumMessageSize: 262144 # 256 KiB (default)
+        MessageRetentionPeriod: 1209600 # 14 days
+        ReceiveMessageWaitTimeSeconds: 20 # long-polling
+        VisibilityTimeout: 120 # 2 minutes
