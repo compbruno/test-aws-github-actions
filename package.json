@@ -1,0 +1,32 @@
+{
+  "name": "test-aws-github-actions",
+  "version": "1.0.0",
+  "description": "POC para testar automação com Github Actions + AWS Lambda",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "sam build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/compbruno/test-aws-github-actions.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/compbruno/test-aws-github-actions/issues"
+  },
+  "homepage": "https://github.com/compbruno/test-aws-github-actions#readme",
+  "dependencies": {
+    "jest": "^29.5.0"
+  },
+  "devDependencies": {
+    "aws-sdk-mock": "^5.8.0"
+  },
+  "jest": {
+    "modulePaths": [
+      "<rootDir>/customLibs/nodejs/node_modules"
+    ]
+  }
+}

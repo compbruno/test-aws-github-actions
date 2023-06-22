@@ -3,9 +3,9 @@ const queueUrl = process.env.SQS_QUEUE_START_PROCESS;
 
 exports.newSupplierCardMovedFunction = async (event, context) => {
   try {
-    await sqsSimplify.sendMessage(queueUrl, "teste");
+    await sqsSimplify.sendMessage(queueUrl, event.body);
     return {
-      statusCode: 200,
+      statusCode: 201,
       body: event.body,
     };
   } catch (error) {

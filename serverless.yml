@@ -32,7 +32,7 @@ functions:
     timeout: 3
     events:
       - http:
-          method: get
+          method: post
           path: '/'
     layers:
       - !Ref CustomLibsLambdaLayer
