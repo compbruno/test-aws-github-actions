@@ -11,7 +11,7 @@ provider:
   iam:
     role:
       statements:
-        - Effect: allow
+        - Effect: Allow
           Action:
             - "sqs:SendMessage"
           Resource: !GetAtt newSupplierCardMovedQueue.Arn
