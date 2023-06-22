@@ -1,13 +1,15 @@
-service: test-aws-github-actions
+service: test-serverless-framework
 
 frameworkVersion: "3"
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs16.x
   stage: dev
   region: sa-east-1
   memorySize: 128
+  environment:
+    SQS_QUEUE_START_PROCESS: !Ref newSupplierCardMovedQueue
   iam:
     role:
       statements:
@@ -22,25 +24,26 @@ layers:
     name: SAM-Events-Advance-Helpers
     description: Custom Libs shared between lambdas
     compatibleRuntimes:
-      - nodejs18.x
+      - nodejs16.x
 
 functions:
-  generateRandomNumber:
-    handler: src/handler.generateRandomNumber
-    timeout: 3
-    architecture: x86_64
-    events:
-      - httpApi:
-          method: POST
-          path: /pipefyWebhook/newSupplier/cardMoved/
-    layers:
-      - !Ref CustomLibsLambdaLayer
-
   newSupplierCardMovedFunction:
     handler: src/newSupplierCardMovedFunction.newSupplierCardMovedFunction
-
-  triggerNewSupplierCardMovedFunction:
-    handler: src/triggerNewSupplierCardMovedFunction.triggerNewSupplierCardMovedFunction
+    timeout: 3
+    events:
+      - http:
+          method: get
+          path: '/'
+    layers:
+      - !Ref CustomLibsLambdaLayer
+  triggerCardMovedFunction:
+    handler: src/triggerCardMovedFunction.triggerCardMovedFunction
+    events:
+      - sqs:
+          arn: !GetAtt newSupplierCardMovedQueue.Arn
+          batchSize: 10
+    layers:
+      - !Ref CustomLibsLambdaLayer
 
 resources:
   Resources:
