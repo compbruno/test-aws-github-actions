@@ -28,7 +28,7 @@ functions:
   generateRandomNumber:
     handler: src/handler.generateRandomNumber
     timeout: 3
-    architecure: x86_64
+    architecture: x86_64
     events:
       - httpApi:
           method: POST
